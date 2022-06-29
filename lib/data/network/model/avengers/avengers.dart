@@ -16,8 +16,7 @@ class Avengers with _$Avengers {
     required String poster,
   }) = _Avengers;
 
-  factory Avengers.fromJson(Map<String, dynamic> json) =>
-      _$AvengersFromJson(json);
+  factory Avengers.fromJson(Map<String, dynamic> json) => _$AvengersFromJson(json);
 
 
 

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:riverpod_sample/app_routes.dart';
 import 'package:riverpod_sample/resources/resources.dart';
-import 'package:riverpod_sample/screen/home/home_screen.dart';
+import 'package:riverpod_sample/route/app_route.dart';
 
 const seedColor = Color(0xff00ffff);
 
@@ -12,7 +11,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final appRouter = AppRouter();
+    return MaterialApp.router(
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
@@ -41,8 +41,8 @@ class App extends StatelessWidget {
                 color: Colors.white,
                 letterSpacing: -0.16,
               ))),
-      initialRoute: HomeScreen.routeName,
-      onGenerateRoute: AppRoutes.onGenerateRoute,
+      routeInformationParser: appRouter.defaultRouteParser(),
+      routerDelegate: appRouter.delegate(),
     );
   }
 }

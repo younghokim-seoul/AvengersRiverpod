@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_sample/main.dart';
 import 'package:riverpod_sample/resources/app_icons.dart';
 import 'package:riverpod_sample/resources/app_styles.dart';
-import 'package:riverpod_sample/screen/detail/detail_screen.dart';
+import 'package:riverpod_sample/route/app_route.dart';
 import 'package:riverpod_sample/screen/home/home_provider.dart';
 import 'package:riverpod_sample/screen/widget/load_asset.dart';
 import 'package:riverpod_sample/screen/widget/loading_indicator.dart';
@@ -67,11 +68,7 @@ class HomeScreen extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {
                                   logger.i(":::::::::::클릭... $e");
-                                  Navigator.pushNamed(
-                                    context,
-                                    DetailScreen.routeName,
-                                    arguments: e,
-                                  );
+                                  context.router.push(DetailScreen(avengers: e));
                                 },
                                 child: CachedNetworkImage(
                                   imageBuilder: (context, imageProvider) =>
