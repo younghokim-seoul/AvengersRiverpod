@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_sample/ble/ble_scan_provider.dart';
+import 'package:riverpod_sample/screen/widget/loading_indicator.dart';
+import 'package:riverpod_sample/widget/ble_icon.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../main.dart';
 
@@ -20,18 +25,44 @@ class _DeviceList extends ConsumerStatefulWidget {
 }
 
 class _DeviceListState extends ConsumerState<_DeviceList> {
+  final BehaviorSubject<BleScannerState> _subjectBleState =
+      BehaviorSubject.seeded(BleScannerState(discoveredDevices: []));
+
   @override
   Widget build(BuildContext context) {
     ref.listen<BleScannerState>(scanResultProvider, (previous, next) {
-      logger.i("::::흠s... ${next.discoveredDevices.length}");
+      _subjectBleState.sink.add(next);
     });
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
-                child: const SizedBox(
-              height: 2,
+                child: StreamBuilder(
+              stream: _subjectBleState.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data != null) {
+                  final item = snapshot.data as BleScannerState;
+                  return ListView(
+                    children: item.discoveredDevices
+                        .map(
+                          (device) => ListTile(
+                            title: Text(device.name),
+                            subtitle:
+                                Text("${device.id}\nRSSI: ${device.rssi}"),
+                            leading: const BluetoothIcon(),
+                            onTap: () async {
+                              logger.i(":::클릭 " + device.toString());
+                            },
+                          ),
+                        )
+                        .toList(),
+                  );
+                } else {
+                  return const LoadingIndicator();
+                }
+              },
             ))
           ],
         ),
@@ -45,5 +76,9 @@ class _DeviceListState extends ConsumerState<_DeviceList> {
     ref.read(scanResultProvider.notifier).scan();
   }
 
-
+  @override
+  void dispose() {
+    super.dispose();
+    _subjectBleState.close();
+  }
 }
