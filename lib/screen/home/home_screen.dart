@@ -7,7 +7,7 @@ import 'package:riverpod_sample/main.dart';
 import 'package:riverpod_sample/resources/app_icons.dart';
 import 'package:riverpod_sample/resources/app_styles.dart';
 import 'package:riverpod_sample/route/app_route.dart';
-import 'package:riverpod_sample/screen/device/scan_provider.dart';
+import 'package:riverpod_sample/screen/device/scan_permission_provider.dart';
 import 'package:riverpod_sample/screen/home/home_provider.dart';
 import 'package:riverpod_sample/screen/widget/load_asset.dart';
 import 'package:riverpod_sample/screen/widget/loading_indicator.dart';

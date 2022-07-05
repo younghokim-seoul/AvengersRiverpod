@@ -25,8 +25,7 @@ class _DeviceList extends ConsumerStatefulWidget {
 }
 
 class _DeviceListState extends ConsumerState<_DeviceList> {
-  final BehaviorSubject<BleScannerState> _subjectBleState =
-      BehaviorSubject.seeded(BleScannerState(discoveredDevices: []));
+  final BehaviorSubject<BleScannerState> _subjectBleState = BehaviorSubject.seeded(BleScannerState(discoveredDevices: []));
 
   @override
   Widget build(BuildContext context) {
