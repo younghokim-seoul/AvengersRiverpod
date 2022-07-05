@@ -11,3 +11,4 @@ final avengersListProvider = FutureProvider.autoDispose<List<Avengers>>((ref) as
   var value = parsedJson.map((dynamic i) => Avengers.fromJson(i as Map<String, dynamic>)).toList();
   return value;
 });
+

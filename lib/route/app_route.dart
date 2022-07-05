@@ -2,26 +2,31 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:riverpod_sample/screen/detail/detail_screen.dart';
+import 'package:riverpod_sample/screen/device/scan_screen.dart';
 import 'package:riverpod_sample/screen/home/home_screen.dart';
 import 'package:riverpod_sample/screen/vedio/vedio_screen.dart';
 
 export 'app_route.gr.dart';
 
 @CupertinoAutoRouter(
-  replaceInRouteName: 'Page,Route',
+  replaceInRouteName: 'Screen,Route',
   routes: <AutoRoute>[
     AutoRoute(
-      path: "/",
+      path: HomeScreen.routeName,
       page: HomeScreen,
       initial: true,
     ),
     AutoRoute(
-      path: "/detail",
+      path: DetailScreen.routeName,
       page: DetailScreen,
     ),
     AutoRoute(
-      path: "/vedio",
+      path: VedioScreen.routeName,
       page: VedioScreen,
+    ),
+    AutoRoute(
+      path: ScanScreen.routeName,
+      page: ScanScreen,
     ),
   ],
 )

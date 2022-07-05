@@ -7,6 +7,7 @@ import 'package:riverpod_sample/main.dart';
 import 'package:riverpod_sample/resources/app_icons.dart';
 import 'package:riverpod_sample/resources/app_styles.dart';
 import 'package:riverpod_sample/route/app_route.dart';
+import 'package:riverpod_sample/screen/device/scan_provider.dart';
 import 'package:riverpod_sample/screen/home/home_provider.dart';
 import 'package:riverpod_sample/screen/widget/load_asset.dart';
 import 'package:riverpod_sample/screen/widget/loading_indicator.dart';
@@ -17,6 +18,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -66,9 +68,16 @@ class HomeScreen extends StatelessWidget {
                             (e) => Card(
                               clipBehavior: Clip.antiAlias,
                               child: InkWell(
-                                onTap: () {
+                                onTap: () async {
                                   logger.i(":::::::::::클릭... $e");
-                                  context.router.push(DetailScreen(avengers: e));
+                                  // context.router.push(DetailRoute(avengers: e));
+
+                                  final check = await ref.read(locationProvider.future);
+                                  logger.i(":::::::::::퍼미션... $check");
+                                  if(check){
+                                    context.router.push(const ScanRoute());
+                                  }
+
                                 },
                                 child: CachedNetworkImage(
                                   imageBuilder: (context, imageProvider) =>

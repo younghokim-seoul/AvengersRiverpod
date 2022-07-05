@@ -37,6 +37,10 @@ dependencies:
   carousel_slider: ^4.1.1
   youtube_player_flutter: ^8.1.0
   auto_route: ^4.0.1
+  flutter_reactive_ble: ^5.0.2
+  permission_handler: ^9.2.0
+
+
 
 
 dev_dependencies:

@@ -8,5 +8,5 @@ var logger = Logger(
 );
 
 void main() {
-  runApp(const ProviderScope(child: App()));
+  runApp(ProviderScope(child: App()));
 }
