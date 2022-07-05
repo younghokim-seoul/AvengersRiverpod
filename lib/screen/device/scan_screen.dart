@@ -52,6 +52,7 @@ class _DeviceListState extends ConsumerState<_DeviceList> {
                                 Text("${device.id}\nRSSI: ${device.rssi}"),
                             leading: const BluetoothIcon(),
                             onTap: () async {
+                             await ref.read(scanResultProvider.notifier).stop();
                               logger.i(":::클릭 " + device.toString());
                             },
                           ),
