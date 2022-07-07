@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:riverpod_sample/resources/resources.dart';
 
 abstract class AppStyles{
   static const bold24 = TextStyle(
@@ -23,4 +24,23 @@ abstract class AppStyles{
     fontWeight: FontWeight.w700,
     letterSpacing: -0.16,
   );
+
+  static const regular12 = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: AppColors.gray0,
+    letterSpacing: -0.12,
+  );
+
+  static BoxDecoration containerDecoration({
+    double radius = 16,
+    Color? color,
+    List<BoxShadow>? boxShadow,
+  }) {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(radius),
+      color: color ?? AppColors.gray1,
+      boxShadow: boxShadow,
+    );
+  }
 }

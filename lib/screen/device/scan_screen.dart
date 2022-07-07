@@ -1,10 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:riverpod_sample/ble/ble_connector_provider.dart';
 import 'package:riverpod_sample/ble/ble_scan_provider.dart';
 import 'package:riverpod_sample/screen/widget/loading_indicator.dart';
 import 'package:riverpod_sample/widget/ble_icon.dart';
+import 'package:riverpod_sample/widget/cutom_toast.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../main.dart';
@@ -25,13 +28,34 @@ class _DeviceList extends ConsumerStatefulWidget {
 }
 
 class _DeviceListState extends ConsumerState<_DeviceList> {
-  final BehaviorSubject<BleScannerState> _subjectBleState = BehaviorSubject.seeded(BleScannerState(discoveredDevices: []));
+  final _fToast = FToast();
+  final BehaviorSubject<BleScannerState> _subjectBleState =
+      BehaviorSubject.seeded(BleScannerState(discoveredDevices: []));
 
   @override
   Widget build(BuildContext context) {
     ref.listen<BleScannerState>(scanResultProvider, (previous, next) {
       _subjectBleState.sink.add(next);
     });
+    ref.listen<ConnectorState>(connectorProvider, (previous, next) {
+      logger.i(":::::next " + next.connectionStateUpdate.toString());
+
+      _fToast.showToast(
+        child: CustomToast(
+          "${next.connectionStateUpdate.deviceId} ${next.connectionStateUpdate.connectionState}",
+        ),
+        gravity: ToastGravity.BOTTOM,
+      );
+      switch (next.connectionStateUpdate.connectionState) {
+        case DeviceConnectionState.connected:
+          break;
+        case DeviceConnectionState.disconnected:
+          break;
+        default:
+          break;
+      }
+    });
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
@@ -52,8 +76,13 @@ class _DeviceListState extends ConsumerState<_DeviceList> {
                                 Text("${device.id}\nRSSI: ${device.rssi}"),
                             leading: const BluetoothIcon(),
                             onTap: () async {
-                             await ref.read(scanResultProvider.notifier).stop();
-                              logger.i(":::클릭 " + device.toString());
+                              await ref
+                                  .read(scanResultProvider.notifier)
+                                  .stop();
+                              await ref
+                                  .read(connectorProvider.notifier)
+                                  .connect(device.id);
+                              logger.i(":::클s " + device.toString());
                             },
                           ),
                         )
@@ -73,6 +102,7 @@ class _DeviceListState extends ConsumerState<_DeviceList> {
   @override
   void initState() {
     super.initState();
+    _fToast.init(context);
     ref.read(scanResultProvider.notifier).scan();
   }
 
