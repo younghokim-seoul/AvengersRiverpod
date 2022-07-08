@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_sample/ble/ble_provider.dart';
 import 'package:riverpod_sample/main.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'ble_connector_provider.freezed.dart';
 
@@ -32,12 +31,12 @@ class DeviceConnectorStateNotifier extends StateNotifier<ConnectorState> {
   late StreamSubscription<ConnectionStateUpdate> _connection;
   final FlutterReactiveBle ble;
 
-
   Future<void> connect(String deviceId) async {
-    logger.i("::::connect try.. " + deviceId);
+    logger.i("::::connect try.. $deviceId");
     _connection = ble.connectToDevice(id: deviceId).listen(
       (update) {
-        logger.i('ConnectionState for device $deviceId : ${update.connectionState}');
+        logger.i(
+            'ConnectionState for device $deviceId : ${update.connectionState}');
         state = state.copyWith(connectionStateUpdate: update);
       },
       onError: (Object e) =>
@@ -62,6 +61,15 @@ class DeviceConnectorStateNotifier extends StateNotifier<ConnectorState> {
     }
   }
 
+  @override
+  void dispose() async {
+    logger.i("dispose");
+    if(state.connectionStateUpdate.connectionState == DeviceConnectionState.connected){
+      logger.i("connect dispose >>> after cancel");
+      await _connection.cancel();
+    }
+    super.dispose();
+  }
 }
 
 @freezed
