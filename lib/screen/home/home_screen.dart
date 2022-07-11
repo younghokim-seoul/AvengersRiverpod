@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                                   // context.router.push(DetailRoute(avengers: e));
 
                                   final check = await ref.read(locationProvider.future);
-                                  logger.i(":::::::::::퍼미션... $check");
+
                                   if(check){
                                     context.router.push(const ScanRoute());
                                   }
