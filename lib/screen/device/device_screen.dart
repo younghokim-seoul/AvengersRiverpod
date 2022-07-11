@@ -3,7 +3,9 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:riverpod_sample/ble/ble_connector_provider.dart';
+import 'package:riverpod_sample/ble/ble_interactor_provider.dart';
 import 'package:riverpod_sample/main.dart';
+import 'package:riverpod_sample/screen/device/packet_send_dialog.dart';
 
 class DeviceScreen extends ConsumerWidget {
   const DeviceScreen({Key? key, required this.device}) : super(key: key);
@@ -15,24 +17,10 @@ class DeviceScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connector = ref.watch(connectorProvider);
+    final interactor = ref.watch(interactorProvider);
 
     var deviceConnected = connector.connectionStateUpdate.connectionState ==
         DeviceConnectionState.connected;
-
-    //
-    //
-    //
-    // ref.listen<ConnectorState>(connectorProvider, (previous, next) {
-    //   logger.i(":::::next " + next.connectionStateUpdate.toString());
-    //   switch (next.connectionStateUpdate.connectionState) {
-    //     case DeviceConnectionState.connected:
-    //       break;
-    //     case DeviceConnectionState.disconnected:
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -57,7 +45,8 @@ class DeviceScreen extends ConsumerWidget {
                 }
               },
               child: Text(
-                deviceConnected ? "disconnect" : "connect",
+                // deviceConnected ? "disconnect" : "connect",
+                connector.connectionStateUpdate.connectionState.name,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -66,7 +55,17 @@ class DeviceScreen extends ConsumerWidget {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.black),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog<void>(
+                        context: context,
+                        builder: (context) {
+                          return PacketSendDialog(characteristic: QualifiedCharacteristic(
+                              characteristicId: Uuid.parse("0783b03e-8535-b5a0-7140-a304d2495cca"),
+                              serviceId: Uuid.parse("0783b03e-8535-b5a0-7140-a304d2495cc7"),
+                              deviceId: device.id));
+                        },
+                      );
+                    },
                     child: const Text(
                       "write",
                       style: TextStyle(color: Colors.white),

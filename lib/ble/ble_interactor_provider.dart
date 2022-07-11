@@ -14,6 +14,7 @@ final interactorProvider = Provider.autoDispose<DeviceInteractorManager>((ref) {
       bleDiscoverServices: bleModule.discoverServices,
       readCharacteristic: bleModule.readCharacteristic,
       writeWithResponse: bleModule.writeCharacteristicWithResponse,
+      writeWithOutResponse: bleModule.writeCharacteristicWithoutResponse,
       subscribeToCharacteristic: bleModule.subscribeToCharacteristic,
       logMessage: bleLogger.addToLog);
 });
@@ -27,12 +28,16 @@ class DeviceInteractorManager {
     required Future<void> Function(QualifiedCharacteristic characteristic,
             {required List<int> value})
         writeWithResponse,
+    required Future<void> Function(QualifiedCharacteristic characteristic,
+        {required List<int> value})
+    writeWithOutResponse,
     required Stream<List<int>> Function(QualifiedCharacteristic characteristic)
         subscribeToCharacteristic,
     required void Function(String message) logMessage,
   })  : _bleDiscoverServices = bleDiscoverServices,
         _readCharacteristic = readCharacteristic,
         _writeWithResponse = writeWithResponse,
+        _writeWithoutResponse = writeWithOutResponse,
         _subScribeToCharacteristic = subscribeToCharacteristic,
         _logMessage = logMessage;
 
@@ -45,10 +50,46 @@ class DeviceInteractorManager {
   final Future<void> Function(QualifiedCharacteristic characteristic,
       {required List<int> value}) _writeWithResponse;
 
+  final Future<void> Function(QualifiedCharacteristic characteristic,
+      {required List<int> value}) _writeWithoutResponse;
+
   final Stream<List<int>> Function(QualifiedCharacteristic characteristic)
       _subScribeToCharacteristic;
 
   final void Function(String message) _logMessage;
+
+
+  Future<void> writeCharacterisiticWithResponse(QualifiedCharacteristic characteristic, List<int> value) async {
+    try {
+      logger.i("Write with response vaslue : $value to ${characteristic.characteristicId}");
+      _logMessage('Write with response value : $value to ${characteristic.characteristicId}');
+      await _writeWithResponse(characteristic, value: value);
+    } on Exception catch (e, s) {
+      _logMessage('Error occured when writing ${characteristic.characteristicId} : $e',);
+      // ignore: avoid_print
+      logger.e(":::::e $e");
+      logger.e(":::::S$s");
+      rethrow;
+    }
+  }
+
+  Future<void> writeCharacterisiticWithoutResponse(
+      QualifiedCharacteristic characteristic, List<int> value) async {
+    try {
+
+      logger.i("Write without response vaslue : $value to ${characteristic.characteristicId}");
+      await _writeWithoutResponse(characteristic, value: value);
+      _logMessage('Write without response value: $value to ${characteristic.characteristicId}');
+    } on Exception catch (e, s) {
+      _logMessage(
+        'Error occured when writing ${characteristic.characteristicId} : $e',
+      );
+      // ignore: avoid_print
+      logger.e(":::::e $e");
+      logger.e(":::::S$s");
+      rethrow;
+    }
+  }
 
   Future<List<DiscoveredService>> discoverServices(String deviceId) async {
     try {
