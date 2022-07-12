@@ -33,7 +33,7 @@ class DeviceConnectorStateNotifier extends StateNotifier<ConnectorState> {
 
   Future<void> connect(String deviceId) async {
     logger.i("::::connect try.. $deviceId");
-    _connection = ble.connectToDevice(id: deviceId).listen(
+    _connection = ble.connectToDevice(id: deviceId,connectionTimeout: const Duration(seconds: 3)).listen(
       (update) {
         logger.i(
             'ConnectionState for device $deviceId : ${update.connectionState}');

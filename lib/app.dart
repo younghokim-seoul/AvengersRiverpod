@@ -30,7 +30,7 @@ class App extends StatelessWidget {
               primaryContainer: AppColors.primary_600,
               secondary: AppColors.secondary_500,
               background: Colors.white,
-              brightness: Brightness.dark),
+              brightness: Brightness.light),
           textTheme:
               GoogleFonts.notoSansNKoTextTheme(Theme.of(context).textTheme),
           appBarTheme: const AppBarTheme(

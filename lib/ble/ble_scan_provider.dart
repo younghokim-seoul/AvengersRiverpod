@@ -34,7 +34,7 @@ class ScanResultStateNotifier extends StateNotifier<BleScannerState> {
     state = state.copyWith(discoveredDevices: []);
     _scanSubscription?.cancel();
     _scanSubscription = ble.scanForDevices(
-        withServices: [], scanMode: ScanMode.balanced,requireLocationServicesEnabled: true).listen((device) {
+        withServices: [], scanMode: ScanMode.lowLatency,requireLocationServicesEnabled: true).listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;

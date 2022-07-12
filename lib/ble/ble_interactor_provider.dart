@@ -84,7 +84,6 @@ class DeviceInteractorManager {
       _logMessage(
         'Error occured when writing ${characteristic.characteristicId} : $e',
       );
-      // ignore: avoid_print
       logger.e(":::::e $e");
       logger.e(":::::S$s");
       rethrow;
