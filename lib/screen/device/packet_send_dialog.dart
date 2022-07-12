@@ -1,11 +1,8 @@
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_sample/ble/ble_interactor_provider.dart';
-import 'package:riverpod_sample/extension/convert_packet_extension.dart';
 import 'package:riverpod_sample/main.dart';
 import 'package:riverpod_sample/screen/device/packetControllerProvider.dart';
 
@@ -35,6 +32,7 @@ class PacketSendDialog extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 20.0),
               child: ElevatedButton(
                   onPressed: () async {
+
                     final text = textEditController.text;
                     var len = text.toString().length;
                     var packetArray = <int>[];
