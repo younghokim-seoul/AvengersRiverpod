@@ -30,33 +30,13 @@ class _DeviceList extends ConsumerStatefulWidget {
 }
 
 class _DeviceListState extends ConsumerState<_DeviceList> {
-  final BehaviorSubject<BleScannerState> _subjectBleState =
-      BehaviorSubject.seeded(BleScannerState(discoveredDevices: []));
+  final BehaviorSubject<BleScannerState> _subjectBleState = BehaviorSubject.seeded(BleScannerState(discoveredDevices: []));
 
   @override
   Widget build(BuildContext context) {
     ref.listen<BleScannerState>(scanResultProvider, (previous, next) {
       _subjectBleState.sink.add(next);
     });
-    // ref.listen<ConnectorState>(connectorProvider, (previous, next) async {
-    //   logger.i(":::::next " + next.connectionStateUpdate.toString());
-    //   _fToast.showToast(
-    //     child: CustomToast(
-    //       "${next.connectionStateUpdate.deviceId} ${next.connectionStateUpdate.connectionState}",
-    //     ),
-    //     gravity: ToastGravity.BOTTOM,
-    //   );
-    //   switch (next.connectionStateUpdate.connectionState) {
-    //     case DeviceConnectionState.connected:
-    //       await context.router.pop(ScanScreen);
-    //       await context.router.push(DeviceRoute(device: next.connectionStateUpdate.deviceId));
-    //       break;
-    //     case DeviceConnectionState.disconnected:
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,

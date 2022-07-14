@@ -55,15 +55,18 @@ class ScanResultStateNotifier extends StateNotifier<BleScannerState> {
       _scanTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
         logger.i("::::스캔 종료");
         stop();
-        _cancelTimeout();
       });
-
-  void _cancelTimeout() => _scanTimer?.cancel();
 
   Future<void> stop() async {
     _scanTimer?.cancel();
     await _scanSubscription?.cancel().then((value) => _scanSubscription = null);
 
+  }
+
+  @override
+  void dispose() async {
+    await stop();
+    super.dispose();
   }
 }
 

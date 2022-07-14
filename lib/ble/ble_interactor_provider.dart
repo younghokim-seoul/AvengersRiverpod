@@ -104,7 +104,10 @@ class DeviceInteractorManager {
 
   Stream<List<int>> subScribeToCharacteristic(
       QualifiedCharacteristic characteristic) {
+    logger.i('Subscribing to: ${characteristic.characteristicId} ');
     _logMessage('Subscribing to: ${characteristic.characteristicId} ');
     return _subScribeToCharacteristic(characteristic);
   }
+
+
 }
