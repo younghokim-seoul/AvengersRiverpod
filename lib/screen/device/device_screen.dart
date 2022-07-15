@@ -74,10 +74,9 @@ class _DeviceControl extends ConsumerStatefulWidget {
 }
 
 class _DeviceControlState extends ConsumerState<_DeviceControl> {
-
-
   StreamSubscription<List<int>>? subscribeStream;
-   PublishSubject<String> responseDataStream = PublishSubject();
+  PublishSubject<String> responseDataStream = PublishSubject();
+
   @override
   Widget build(BuildContext context) {
     bool notifyEnable = ref.watch(notifyEnableProvider);
@@ -131,11 +130,12 @@ class _DeviceControlState extends ConsumerState<_DeviceControl> {
                   children: [
                     ...items
                         .map((e) => _characteristicTile(e))
-                        .toList().reversed
+                        .toList()
+                        .reversed
                   ],
                 );
               }
-              return  const SizedBox.shrink();
+              return const SizedBox.shrink();
             },
           )),
         ]);
@@ -152,7 +152,6 @@ class _DeviceControlState extends ConsumerState<_DeviceControl> {
     subscribeStream?.cancel();
     super.dispose();
   }
-
 
   Future<void> subscribeCharacteristic() async {
     var characteristic = QualifiedCharacteristic(
